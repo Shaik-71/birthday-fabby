@@ -14,7 +14,7 @@ body {
   text-align: center;
 }
 
-/* INTRO SCREEN */
+/* INTRO */
 #intro {
   height: 100vh;
   display: flex;
@@ -26,40 +26,45 @@ body {
 #intro button {
   padding: 15px 30px;
   font-size: 20px;
-  border: none;
   border-radius: 30px;
   background: #ff3366;
   color: white;
-  cursor: pointer;
+  border: none;
 }
 
-/* MAIN CONTENT */
+/* NAME SCREEN */
+#nameScreen {
+  display: none;
+  height: 100vh;
+  justify-content: center;
+  align-items: center;
+  background: black;
+}
+
+#nameText {
+  font-size: 50px;
+  animation: glow 1.5s infinite alternate;
+}
+
+@keyframes glow {
+  from { text-shadow: 0 0 10px pink; }
+  to { text-shadow: 0 0 30px red; }
+}
+
+/* MAIN */
 #main {
   display: none;
   background: linear-gradient(to right, #ff9a9e, #fad0c4);
   min-height: 100vh;
-  overflow-x: hidden;
 }
 
-.container {
-  padding: 20px;
-}
+.container { padding: 20px; }
 
-h1 {
-  font-size: 36px;
-}
+h1 { font-size: 36px; }
 
 /* SLIDESHOW */
-.slideshow {
-  max-width: 300px;
-  margin: 20px auto;
-}
-
-.slide {
-  display: none;
-  width: 100%;
-  border-radius: 20px;
-}
+.slideshow { max-width: 300px; margin: 20px auto; }
+.slide { display: none; width: 100%; border-radius: 20px; }
 
 /* GALLERY */
 .gallery {
@@ -83,17 +88,43 @@ h1 {
   cursor: pointer;
 }
 
-/* Floating hearts */
+/* HEARTS */
 .heart {
   position: fixed;
   bottom: -10px;
-  color: red;
   animation: float 5s linear infinite;
 }
 
 @keyframes float {
-  0% { transform: translateY(0); opacity: 1; }
-  100% { transform: translateY(-800px); opacity: 0; }
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-800px); opacity:0; }
+}
+
+/* POPUP */
+#popup {
+  position: fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background: rgba(0,0,0,0.8);
+  display:none;
+  justify-content:center;
+  align-items:center;
+}
+
+.letter {
+  background:white;
+  color:black;
+  padding:20px;
+  border-radius:15px;
+  max-width:300px;
+  animation: scaleUp 0.5s ease;
+}
+
+@keyframes scaleUp {
+  from { transform: scale(0.5); opacity:0; }
+  to { transform: scale(1); opacity:1; }
 }
 </style>
 
@@ -102,43 +133,47 @@ let index = 0;
 
 function startSite() {
   document.getElementById("intro").style.display = "none";
-  document.getElementById("main").style.display = "block";
+  document.getElementById("nameScreen").style.display = "flex";
 
-  document.getElementById("bgMusic").play();
-
-  showSlides();
+  setTimeout(() => {
+    document.getElementById("nameScreen").style.display = "none";
+    document.getElementById("main").style.display = "block";
+    document.getElementById("bgMusic").play();
+    showSlides();
+  }, 2500);
 }
 
-/* Slideshow */
+/* SLIDESHOW */
 function showSlides() {
   let slides = document.getElementsByClassName("slide");
-  for (let i = 0; i < slides.length; i++) {
-    slides[i].style.display = "none";
-  }
+  for (let i = 0; i < slides.length; i++) slides[i].style.display = "none";
   index++;
-  if (index > slides.length) { index = 1; }
+  if (index > slides.length) index = 1;
   slides[index-1].style.display = "block";
   setTimeout(showSlides, 2000);
 }
 
-/* Surprise */
+/* POPUP */
 function showMessage() {
-  document.getElementById("msg").style.display = "block";
+  document.getElementById("popup").style.display = "flex";
 }
 
-/* Floating Hearts */
+function closePopup() {
+  document.getElementById("popup").style.display = "none";
+}
+
+/* HEARTS */
 function createHeart() {
   let heart = document.createElement("div");
   heart.className = "heart";
   heart.innerHTML = "❤️";
-  heart.style.left = Math.random() * 100 + "vw";
-  heart.style.fontSize = Math.random() * 20 + 20 + "px";
+  heart.style.left = Math.random()*100+"vw";
+  heart.style.fontSize = (Math.random()*20+20)+"px";
   document.body.appendChild(heart);
-
-  setTimeout(() => heart.remove(), 5000);
+  setTimeout(()=>heart.remove(),5000);
 }
 
-setInterval(createHeart, 300);
+setInterval(createHeart,300);
 </script>
 
 </head>
@@ -151,6 +186,11 @@ setInterval(createHeart, 300);
   <button onclick="startSite()">Open Your Surprise ❤️</button>
 </div>
 
+<!-- NAME ANIMATION -->
+<div id="nameScreen">
+  <h1 id="nameText">Fabby ❤️</h1>
+</div>
+
 <!-- MUSIC -->
 <audio id="bgMusic" loop>
   <source src="musicf1.mp3" type="audio/mpeg">
@@ -158,50 +198,53 @@ setInterval(createHeart, 300);
 
 <!-- MAIN -->
 <div id="main">
-  <div class="container">
+<div class="container">
 
-    <h1>Happy Birthday Fabby Andesla Febrian ❤️</h1>
+<h1>Happy Birthday Fabby Andesla Febrian ❤️</h1>
 
-    <p style="font-size:18px; max-width:600px; margin:auto;">
-      From the day we met online, you became my favorite person 💖  
-      Distance can’t stop my love for you.  
-      You are my happiness forever ❤️
-    </p>
+<p style="font-size:18px;">
+From the day we met online, you became my favorite person 💖  
+Distance can’t stop my love for you ❤️
+</p>
 
-    <!-- SLIDESHOW -->
-    <div class="slideshow">
-      <img class="slide" src="photof1.jpeg">
-      <img class="slide" src="photof2.jpeg">
-      <img class="slide" src="photof3.jpeg">
-      <img class="slide" src="photof4.jpeg">
-      <img class="slide" src="photo5.jpeg">
-      <img class="slide" src="photo6.jpeg">
-      <img class="slide" src="photo7.jpeg">
-      <img class="slide" src="photo8.jpeg">
-      <img class="slide" src="photo9.jpeg">
-    </div>
+<div class="slideshow">
+<img class="slide" src="photof1.jpeg">
+<img class="slide" src="photof2.jpeg">
+<img class="slide" src="photof3.jpeg">
+<img class="slide" src="photof4.jpeg">
+<img class="slide" src="photo5.jpeg">
+<img class="slide" src="photo6.jpeg">
+<img class="slide" src="photo7.jpeg">
+<img class="slide" src="photo8.jpeg">
+<img class="slide" src="photo9.jpeg">
+</div>
 
-    <div class="button" onclick="showMessage()">Click for Surprise 🎁</div>
+<div class="button" onclick="showMessage()">Click for Surprise 🎁</div>
 
-    <p id="msg" style="display:none; margin-top:20px;">
-      I wish I could be there with you today ❤️  
-      But one day, I promise we will celebrate together 💫  
-      I love you forever 💖
-    </p>
+<div class="gallery">
+<img src="photof1.jpeg">
+<img src="photof2.jpeg">
+<img src="photof3.jpeg">
+<img src="photof4.jpeg">
+<img src="photo5.jpeg">
+<img src="photo6.jpeg">
+<img src="photo7.jpeg">
+<img src="photo8.jpeg">
+<img src="photo9.jpeg">
+</div>
 
-    <!-- GALLERY -->
-    <div class="gallery">
-      <img src="photof1.jpeg">
-      <img src="photof2.jpeg">
-      <img src="photof3.jpeg">
-      <img src="photof4.jpeg">
-      <img src="photo5.jpeg">
-      <img src="photo6.jpeg">
-      <img src="photo7.jpeg">
-      <img src="photo8.jpeg">
-      <img src="photo9.jpeg">
-    </div>
+</div>
+</div>
 
+<!-- POPUP -->
+<div id="popup" onclick="closePopup()">
+  <div class="letter" onclick="event.stopPropagation()">
+    💌 My Love,<br><br>
+    You are the most beautiful part of my life.  
+    Even from miles away, you mean everything to me ❤️  
+    One day, I’ll celebrate this with you in real 💫  
+    <br><br> I love you forever 💖  
+    <br><br><small>(Tap outside to close ❤️)</small>
   </div>
 </div>
 
